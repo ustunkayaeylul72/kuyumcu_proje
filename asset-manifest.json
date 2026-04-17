@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kuyumcu_proje/static/css/main.8639591b.css",
+    "main.js": "/kuyumcu_proje/static/js/main.1d13f0c6.js",
+    "static/media/bilezik.jpg": "/kuyumcu_proje/static/media/bilezik.03fe19cb54187b053638.jpg",
+    "static/media/pirlanta.jpg": "/kuyumcu_proje/static/media/pirlanta.bb93b79aace77202fbd5.jpg",
+    "index.html": "/kuyumcu_proje/index.html",
+    "main.8639591b.css.map": "/kuyumcu_proje/static/css/main.8639591b.css.map",
+    "main.1d13f0c6.js.map": "/kuyumcu_proje/static/js/main.1d13f0c6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8639591b.css",
+    "static/js/main.1d13f0c6.js"
+  ]
+}
