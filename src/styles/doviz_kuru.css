@@ -1,0 +1,97 @@
+/* src/styles/doviz_kuru.css */
+.live-ticker-band {
+    background: linear-gradient(180deg, #0f0f13 0%, #050508 100%);
+    color: #fff;
+    padding: 15px 0;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+}
+
+.ticker-fade-left, .ticker-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+}
+.ticker-fade-left {
+    left: 0;
+    background: linear-gradient(to right, #050508 0%, transparent 100%);
+}
+.ticker-fade-right {
+    right: 0;
+    background: linear-gradient(to left, #050508 0%, transparent 100%);
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    animation: scrollTicker 30s linear infinite;
+}
+
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollTicker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 40px;
+    padding: 8px 24px;
+    background: rgba(30, 30, 40, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.ticker-item:hover {
+    background: rgba(40, 40, 50, 0.8);
+    border-color: rgba(212, 175, 55, 0.5);
+    transform: scale(1.05);
+}
+
+.ticker-symbol {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #9ba1a6;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.ticker-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f1f1f1;
+}
+
+.ticker-trend {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.ticker-trend.up {
+    color: #00e676;
+    text-shadow: 0 0 10px rgba(0, 230, 118, 0.6);
+}
+
+.ticker-trend.down {
+    color: #ff3d00;
+    text-shadow: 0 0 10px rgba(255, 61, 0, 0.6);
+}
