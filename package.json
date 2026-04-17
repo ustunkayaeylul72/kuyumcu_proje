@@ -1,6 +1,7 @@
 {
   "name": "kuyumcu-proje",
   "version": "1.0.0",
+  "homepage": "https://ustunkayaeylul72.github.io/kuyumcu_proje",
   "description": "Akıllı Kuyumcu ve Finansal Varlık Yönetimi",
   "main": "src/index.js",
   "dependencies": {
@@ -8,9 +9,12 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "react-scripts": "^5.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build"
   },

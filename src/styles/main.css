@@ -9,12 +9,13 @@ body {
         radial-gradient(circle at -20% 80%, rgba(100, 70, 0, 0.4), transparent 40%),
         radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.1), transparent 30%);
     color: #f1f1f1;
-    /* Düz metinleri OUTFIT fontuna çevirdik çok daha elit modern görünür */
     font-family: 'Outfit', sans-serif; 
     margin: 0;
     padding: 0;
     min-height: 100vh;
     overflow-x: hidden;
+    /* Ekrandaki devasa büyümeyi engellemek için tüm sistemi %70 küçültüyoruz */
+    zoom: 0.70; 
 }
 
 h1, h2, h3, h4, h5, h6 {
