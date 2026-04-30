@@ -5,7 +5,7 @@
 ---
 
 ##  Proje Hakkında
-**AURUM X**, dünya standartlarındaki üst düzey lüks mücevher alışverişini, anlık borsa takibini ve uluslararası pırlanta/gümrük işlemlerini tek bir profesyonel panelde (Dashboard) birleştiren kapsamlı bir **Finansal React Projesidir**. 
+**AURUM X**, anlık borsa takibini ve alım/satım işlemlerini tek bir profesyonel panelde (Dashboard) birleştiren kapsamlı bir **Finansal React Projesidir**. 
 
 Projede, modern İsviçre bankacılık sistemlerinden ilham alınarak **"Cam Tasarım (Glassmorphism)"** mimarisi uygulanmış ve arayüz tamamen lüks tipografi (Cinzel ve Outfit fontları) elementleriyle bezenmiştir.
 
