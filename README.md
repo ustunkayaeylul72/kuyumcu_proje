@@ -15,12 +15,16 @@ Projede, modern İsviçre bankacılık sistemlerinden ilham alınarak **"Cam Tas
 
 1.  **Canlı Gerçek Zamanlı Veri (Live Market API)** 
    Türkiye içi altın ve global döviz fiyatları, anlık olarak `finans.truncgil.com` sunucularından çekilip Node.js backend'imiz üzerinden işlenerek (CORS engelleri aşılarak) projeye dahil edilmektedir.
+
 2.  **Dinamik Fiyatlandırma Algoritması (Auto-Math)** 
    22 Ayar 10 Gramlık Burma Bilezik'in vitrin fiyatı durağan değildir. Sistem; canlı piyasadaki "Saf Gram" verisini okuyarak matematiksel bir formülle `= (Gram Fiyatı * 10 * 0.916)` vitrine anlık yansıtır.
+    
 3.  **Gelişmiş AI Tavsiye Sistemi (Invest UI)** 
    Yatırım sekmesindeki analiz algoritması statik değildir. O anki canlı borsa verisini okuyarak piyasa artışta ise ayrı, düşüşte ise ayrı yatırım senaryoları ve uyarıları üretir.
+
 4.  **B2B2C Hibrit Sistem (Müşteri & Yönetici Rolleri)**
    Sistem sadece tek taraflı değildir. **Vitrin ve Yatırım** sayfaları VIP müşterilerin kendi portföylerini yönetip canlı işlem (Trade) yaptığı kısımdır. **Admin Terminali** ise kuyumcu/şirket yöneticisinin tüm müşterilerin varlıklarını ve son alım-satım işlemlerini canlı takip ettiği merkez paneldir.
+
 5.  **Tam Teşekküllü Backend & Veritabanı (Node.js & SQLite)**
    Uygulamanın arkaplanında Express.js tabanlı özel bir API servisi çalışmaktadır. Tüm işlemler anlık olarak yerel **SQLite** veritabanında tutulur. Kullanılan veri tabloları şunlardır:
    - `users`: Kullanıcıların nakit bakiyelerini (balance) tutar.
@@ -58,7 +62,7 @@ npm start
 
 *Not: "npm start" dedikten sonra proje varsayılan olarak `http://localhost:3000` adresinde hayat bulacaktır.*
 
-##SİTEDEN BAZI GÖRSELLER
+## SİTEDEN BAZI GÖRSELLER
 
 <img width="1913" height="875" alt="image" src="https://github.com/user-attachments/assets/15245d80-c709-4b74-904c-e5f48f962541" />
 
