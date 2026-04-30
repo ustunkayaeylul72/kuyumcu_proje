@@ -5,19 +5,53 @@ import '../styles/dashboard.css';
 
 const Invest = () => {
     const [isTradeOpen, setTradeOpen] = useState(false);
+    const [tradeAsset, setTradeAsset] = useState("GRAM");
     const [marketOpportunities, setMarketOpportunities] = useState([]);
+    const [portfolioData, setPortfolioData] = useState({ balance: 0, assets: {} });
+
+    // Fetch portfolio data from backend
+    const fetchPortfolio = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/portfolio/1');
+            if (response.ok) {
+                const data = await response.json();
+                setPortfolioData(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch portfolio:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPortfolio();
+    }, [isTradeOpen]); // Refresh when trade modal closes
+
+    const openTradeWithAsset = (assetSymbol) => {
+        setTradeAsset(assetSymbol);
+        setTradeOpen(true);
+    };
 
     const portfolioStats = [
-        { title: "Toplam Varlık Değeri", value: "₺1.240.500", trend: "+₺45.200 (Günlük)", isPositive: true },
-        { title: "Kasa: Fiziksel Altın", value: "85 Gram", subtitle: "(Sigortalı Kasada Bekleyen)", isPositive: true },
-        { title: "Kasa: Döviz ve Fon", value: "$4.500", subtitle: "(Küresel Yabancı Fon)", isPositive: true }
+        { title: "Nakit Bakiye (TRY)", value: `₺${portfolioData.balance.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`, trend: "Kullanılabilir Bakiye", isPositive: true },
+        { 
+            title: "Kasa: Fiziksel Altın", 
+            value: `${portfolioData.assets['GRAM']?.amount || 0} Gr / ${portfolioData.assets['ÇEYREK']?.amount || 0} Çyrk`, 
+            subtitle: "(Sigortalı Kasada Bekleyen)", 
+            isPositive: true 
+        },
+        { 
+            title: "Kasa: Yabancı Döviz", 
+            value: `$${portfolioData.assets['USD']?.amount || 0} / €${portfolioData.assets['EUR']?.amount || 0}`, 
+            subtitle: "(Küresel Döviz Hesabı)", 
+            isPositive: true 
+        }
     ];
 
-    const activeInvestments = [
-        { name: "AURUM Dijital Altın Fonu", amount: "₺850.000", returnRate: "+%8.5" },
-        { name: "Uluslararası Pırlanta Endeksi", amount: "₺250.000", returnRate: "+%12.4" },
-        { name: "24 Ayar Külçe Zımmet", amount: "₺140.500", returnRate: "-%1.2" }
-    ];
+    const activeInvestments = Object.entries(portfolioData.assets).map(([symbol, data]) => ({
+        name: `${symbol} Varlığı`,
+        amount: `${data.amount} Birim`,
+        returnRate: `${parseFloat(data.roi) >= 0 ? '+' : ''}%${data.roi}`
+    }));
 
     // Sayfa yüklendiğinde Borsa API'sini çekip tavsiyeyi canlı rakamlara göre şekillendiren Yapay Zeka Mantığı
     useEffect(() => {
@@ -33,14 +67,16 @@ const Invest = () => {
                         title: `Gram Altın Fırsatı (${gramRow.price})`,
                         desc: "Yapay zeka analizine göre Gram Altın tarihi destek seviyesine indi. Bu büyük bir DİPTEN ALIM fırsatıdır.",
                         action: "Kademeli Alış Yap",
-                        color: "#4caf50"
+                        color: "#4caf50",
+                        symbol: "GRAM"
                     });
                 } else {
                     ops.push({
                         title: `Gram Altın Trendi (${gramRow.price})`,
                         desc: "Gram Altın istikrarlı yükselişini sürdürüyor. Kâr satışı için uygun veya kilitli kasada tutmaya devam edilebilir.",
-                        action: "Pozisyonu Koru",
-                        color: "#ffd700"
+                        action: "Satış / İşlem Yap",
+                        color: "#ffd700",
+                        symbol: "GRAM"
                     });
                 }
             }
@@ -53,21 +89,23 @@ const Invest = () => {
                         title: `Euro Düşüşte (${eurRow.price})`,
                         desc: "Bölgesel veriler Euro'da gerilemeyi tetikledi. Sepet riskini azaltmak için bir miktar döviz biriktirme şansı.",
                         action: "Fon Sepetine Ekle",
-                        color: "#4caf50"
+                        color: "#4caf50",
+                        symbol: "EUR"
                     });
                 } else {
                     ops.push({
                         title: `Euro Yükselişte (${eurRow.price})`,
                         desc: "Döviz direnç kırılımı gerçekleştirdi. Mevcut yabancı para fonlarının getirileri anlık artış gösteriyor.",
-                        action: "İncele",
-                        color: "#ffd700"
+                        action: "İncele / İşlem Yap",
+                        color: "#ffd700",
+                        symbol: "EUR"
                     });
                 }
             }
 
             // Yüklenirken veya API hatası olursa varsayılan yedek
             if (ops.length === 0) {
-                ops = [{ title: "Sistem Analizi", desc: "Piyasalar değerlendiriliyor. Lütfen bekleyin.", action: "Hesaplanıyor", color: "#a1a1aa" }];
+                ops = [{ title: "Sistem Analizi", desc: "Piyasalar değerlendiriliyor. Lütfen bekleyin.", action: "Hesaplanıyor", color: "#a1a1aa", symbol: "GRAM" }];
             }
 
             setMarketOpportunities(ops);
@@ -85,7 +123,7 @@ const Invest = () => {
                 </div>
                 <button 
                     className="primary-btn" 
-                    onClick={() => setTradeOpen(true)}
+                    onClick={() => openTradeWithAsset("GRAM")}
                     style={{ fontSize: '1.2rem', padding: '18px 45px', boxShadow: '0 0 30px rgba(255,215,0,0.3)', animation: 'pulse 2s infinite' }}
                 >
                     Hızlı İşlem Yap (Al/Sat)
@@ -114,11 +152,14 @@ const Invest = () => {
                         <thead>
                             <tr>
                                 <th>Yatırım Aracı</th>
-                                <th>Güncel Değer</th>
-                                <th>Getiri</th>
+                                <th>Miktar</th>
+                                <th>Getiri (ROI)</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {activeInvestments.length === 0 && (
+                                <tr><td colSpan="3" style={{textAlign: 'center', padding: '20px', color: '#a1a1aa'}}>Henüz varlığınız bulunmamaktadır.</td></tr>
+                            )}
                             {activeInvestments.map((inv, idx) => (
                                 <tr key={idx}>
                                     <td style={{ color: '#fff', fontSize: '1.1rem' }}>{inv.name}</td>
@@ -143,9 +184,12 @@ const Invest = () => {
                         <div key={idx} style={{ background: 'rgba(0,0,0,0.5)', padding: '20px', borderRadius: '12px', marginBottom: '20px', borderLeft: `3px solid ${opp.color}` }}>
                             <div style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '8px' }}>{opp.title}</div>
                             <div style={{ color: '#8892b0', fontSize: '0.95rem', marginBottom: '20px', lineHeight: '1.5' }}>{opp.desc}</div>
-                            <button style={{ background: 'transparent', border: `1px solid ${opp.color}`, color: opp.color, fontWeight: 'bold', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', transition: 'all 0.3s' }} 
-                                    onMouseOver={e => { e.target.style.background = opp.color; e.target.style.color = '#000'; }}
-                                    onMouseOut={e => { e.target.style.background = 'transparent'; e.target.style.color = opp.color; }}>
+                            <button 
+                                style={{ background: 'transparent', border: `1px solid ${opp.color}`, color: opp.color, fontWeight: 'bold', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', transition: 'all 0.3s' }} 
+                                onMouseOver={e => { e.target.style.background = opp.color; e.target.style.color = '#000'; }}
+                                onMouseOut={e => { e.target.style.background = 'transparent'; e.target.style.color = opp.color; }}
+                                onClick={() => openTradeWithAsset(opp.symbol)}
+                            >
                                 {opp.action}
                             </button>
                         </div>
@@ -154,9 +198,10 @@ const Invest = () => {
 
             </div>
 
-            <TradeModal isOpen={isTradeOpen} onClose={() => setTradeOpen(false)} />
+            <TradeModal isOpen={isTradeOpen} onClose={() => setTradeOpen(false)} defaultAsset={tradeAsset} />
         </div>
     );
 };
 
 export default Invest;
+

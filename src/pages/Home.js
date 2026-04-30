@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import LiveTicker from '../components/LiveTicker';
 import AssetCard from '../components/AssetCard';
 import { getMarketData } from '../services/marketService';
 
 import pirlantaImg from '../assets/images/pirlanta.jpg';
 import bilezikImg from '../assets/images/bilezik.jpg';
 import gramImg from '../assets/images/gram.jpg';
+import logoImg from '../assets/logo.png';
 
 const Home = () => {
     const [liveGramPrice, setLiveGramPrice] = useState("Hesaplanıyor...");
@@ -42,11 +42,10 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <LiveTicker />
-            
             <div className="hero-section" style={{ padding: '80px 20px', textAlign: 'center' }}>
-                <h1 className="hero-title" style={{ fontSize: '4.5rem', marginBottom: '20px', letterSpacing: '2px', textShadow: '0 5px 15px rgba(212, 175, 55, 0.4)' }}>
-                    <span className="gold-text">AURUM</span> X Özel Koleksiyonu
+                <h1 className="hero-title" style={{ fontSize: '4.5rem', marginBottom: '20px', letterSpacing: '2px', textShadow: '0 5px 15px rgba(212, 175, 55, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+                    <img src={logoImg} alt="Aurum X Logo" style={{ height: '80px', borderRadius: '15px' }} />
+                    <span><span className="gold-text">AURUM</span> X Özel Koleksiyonu</span>
                 </h1>
                 <p className="hero-subtitle" style={{ color: '#d1d5db', fontSize: '1.4rem', fontWeight: '500', maxWidth: '750px', margin: '0 auto 60px auto', lineHeight: '1.6' }}>
                     Geleneksel zanaat ile yenilikçi teknolojinin görkemli buluşmasına şahit olun.<br/>

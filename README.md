@@ -14,13 +14,18 @@ Projede, modern İsviçre bankacılık sistemlerinden ilham alınarak **"Cam Tas
 ## ✨ Teknik ve Mimari Özellikler
 
 1. ⚡ **Canlı Gerçek Zamanlı Veri (Live Market API)** 
-   Türkiye içi altın ve global döviz fiyatları, anlık olarak `finans.truncgil.com` sunucularından CORS yapısını atlayan akıllı bir Fetch mimarisi ile projeye dahil edilmektedir. Sunucu verisi anlık oklar ve trend renkleriyle görselleştirilir.
+   Türkiye içi altın ve global döviz fiyatları, anlık olarak `finans.truncgil.com` sunucularından çekilip Node.js backend'imiz üzerinden işlenerek (CORS engelleri aşılarak) projeye dahil edilmektedir.
 2. 🧮 **Dinamik Fiyatlandırma Algoritması (Auto-Math)** 
-   22 Ayar 10 Gramlık Burma Bilezik'in vitrin fiyatı durağan değildir. Sistem; canlı piyasadaki "Saf Gram" verisini anlık arındırır ve matematiksel bir kodla `= (Gram Fiyatı * 10 * 0.916 Saflık Oranı)` güncelleyerek her saniye tamamen **gerçek fiyat** üzerinden vitrine yansıtır.
+   22 Ayar 10 Gramlık Burma Bilezik'in vitrin fiyatı durağan değildir. Sistem; canlı piyasadaki "Saf Gram" verisini okuyarak matematiksel bir formülle `= (Gram Fiyatı * 10 * 0.916)` vitrine anlık yansıtır.
 3. 🤖 **Gelişmiş AI Tavsiye Sistemi (Invest UI)** 
-   Yatırım sekmesindeki analiz algoritması statik bir metin değildir. O anki canlı borsa verisini okuyarak piyasa artışta (yeşil) ise ayrı, düşüşte (kırmızı) ise ayrı yatırım uyarı senaryolarına (metin ve buton yönlendirmesi) bürünür.
-4. 🏦 **Premium Yönetim Terminali**
-   Projenin Admin arayüzü, gelişmiş kurumsal tablo altyapıları ile donatılmıştır. Canlı stok hacimleri ve uluslararası menşei taşıyan ürünlerin "Geçiş Hattı Renkleri (Gümrük)" gerçek bankacılık arayüzlerini anımsatacak şekilde modellenmiştir.
+   Yatırım sekmesindeki analiz algoritması statik değildir. O anki canlı borsa verisini okuyarak piyasa artışta ise ayrı, düşüşte ise ayrı yatırım senaryoları ve uyarıları üretir.
+4. 🏢 **B2B2C Hibrit Sistem (Müşteri & Yönetici Rolleri)**
+   Sistem sadece tek taraflı değildir. **Vitrin ve Yatırım** sayfaları VIP müşterilerin kendi portföylerini yönetip canlı işlem (Trade) yaptığı kısımdır. **Admin Terminali** ise kuyumcu/şirket yöneticisinin tüm müşterilerin varlıklarını ve son alım-satım işlemlerini canlı takip ettiği merkez paneldir.
+5. 🗄️ **Tam Teşekküllü Backend & Veritabanı (Node.js & SQLite)**
+   Uygulamanın arkaplanında Express.js tabanlı özel bir API servisi çalışmaktadır. Tüm işlemler anlık olarak yerel **SQLite** veritabanında tutulur. Kullanılan veri tabloları şunlardır:
+   - `users`: Kullanıcıların nakit bakiyelerini (balance) tutar.
+   - `portfolio`: Kullanıcının sahip olduğu varlıkları (GRAM, EUR, ÇEYREK vb.) ve miktarlarını depolar.
+   - `transactions`: Yapılan tüm Alış (BUY) ve Satış (SELL) işlemlerinin kaydını (Zaman, Fiyat, Tutar) loglar ve gerçek ROI (Getiri Oranı) hesaplamasında kullanılır.
 
 ---
 
