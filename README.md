@@ -58,6 +58,9 @@ npm start
 
 *Not: "npm start" dedikten sonra proje varsayılan olarak `http://localhost:3000` adresinde hayat bulacaktır.*
 
+<img width="1913" height="875" alt="image" src="https://github.com/user-attachments/assets/15245d80-c709-4b74-904c-e5f48f962541" />
+
+
 ---
 
 **Geliştirici & Tasarımcı:** Eylul Ustunkaya  
