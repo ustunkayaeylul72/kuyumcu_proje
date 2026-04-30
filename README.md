@@ -1,6 +1,6 @@
 #  AURUM X - Lüks Kuyumcu & Finansal Varlık Yönetim Terminali
 
-**Canlı Demo Linki:** [Proje Sayfasına Git - Canlı Versiyon 🚀](https://ustunkayaeylul72.github.io/kuyumcu_proje/index.html)
+**Canlı Demo Linki:** [Proje Sayfasına Git - Canlı Versiyon](https://ustunkayaeylul72.github.io/kuyumcu_proje/index.html)
 
 ---
 
