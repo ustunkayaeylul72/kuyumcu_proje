@@ -1,7 +1,12 @@
 export const getMarketData = async () => {
     try {
-        // Dinamik URL - local veya production ortamında çalışır
-        const baseUrl = window.location.origin;
+        // Production: Railway backend URL
+        // Local: localhost:5000
+        const isProduction = window.location.hostname !== 'localhost';
+        const baseUrl = isProduction 
+            ? 'https://kuyumcu-backend.railway.app'  // ⬅️ Railway'den aldığın URL buraya koy
+            : 'http://localhost:5000';
+        
         const targetUrl = `${baseUrl}/api/market`;
         
         const response = await fetch(targetUrl);
@@ -10,7 +15,6 @@ export const getMarketData = async () => {
         }
         const data = await response.json();
         
-        // Backend zaten formatlanmış veriyi gönderiyor
         return Array.isArray(data) ? data : [];
         
     } catch (error) {
