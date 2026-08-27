@@ -1,7 +1,8 @@
 export const getMarketData = async () => {
     try {
-        // Backend API'ye istek atıyoruz (Backend Tunçgil'den çekecek)
-        const targetUrl = `http://localhost:5000/api/market`;
+        // Dinamik URL - local veya production ortamında çalışır
+        const baseUrl = window.location.origin;
+        const targetUrl = `${baseUrl}/api/market`;
         
         const response = await fetch(targetUrl);
         if (!response.ok) {
