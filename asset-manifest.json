@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/kuyumcu_proje/static/css/main.96a6f081.css",
-    "main.js": "/kuyumcu_proje/static/js/main.077b57ed.js",
+    "main.js": "/kuyumcu_proje/static/js/main.1f45b404.js",
     "static/media/logo.png": "/kuyumcu_proje/static/media/logo.13007abaee299ae2f7ce.png",
     "static/media/bilezik.jpg": "/kuyumcu_proje/static/media/bilezik.03fe19cb54187b053638.jpg",
     "static/media/pirlanta.jpg": "/kuyumcu_proje/static/media/pirlanta.bb93b79aace77202fbd5.jpg",
     "index.html": "/kuyumcu_proje/index.html",
     "main.96a6f081.css.map": "/kuyumcu_proje/static/css/main.96a6f081.css.map",
-    "main.077b57ed.js.map": "/kuyumcu_proje/static/js/main.077b57ed.js.map"
+    "main.1f45b404.js.map": "/kuyumcu_proje/static/js/main.1f45b404.js.map"
   },
   "entrypoints": [
     "static/css/main.96a6f081.css",
-    "static/js/main.077b57ed.js"
+    "static/js/main.1f45b404.js"
   ]
 }
