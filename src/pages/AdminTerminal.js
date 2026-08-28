@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getPortfolio, getTransactions } from '../services/portfolioService';
+import { getMarketData } from '../services/marketService';
 import '../styles/dashboard.css';
 
 const AdminTerminal = () => {
@@ -13,36 +15,39 @@ const AdminTerminal = () => {
     useEffect(() => {
         const fetchAdminData = async () => {
             try {
-                const [portRes, transRes] = await Promise.all([
-                    fetch('http://localhost:5000/api/portfolio/1'),
-                    fetch('http://localhost:5000/api/transactions/1')
+                // Fetch market data for ROI
+                const marketData = await getMarketData();
+                const priceMap = {};
+                marketData.forEach(item => {
+                    if (item.symbol.includes("GRAM")) priceMap["GRAM"] = item.numericPrice;
+                    if (item.symbol.includes("USD")) priceMap["USD"] = item.numericPrice;
+                    if (item.symbol.includes("EUR")) priceMap["EUR"] = item.numericPrice;
+                    if (item.symbol.includes("ÇEYREK")) priceMap["ÇEYREK"] = item.numericPrice;
+                });
+
+                const portData = getPortfolio(priceMap);
+                const transData = getTransactions();
+
+                // Calculate total volume from transactions
+                const totalVolume = transData.reduce((sum, t) => sum + t.total_cost, 0);
+
+                setStats([
+                    { title: "Toplam Nakit Kasa Değeri", value: `₺${portData.balance.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`, icon: "💰", color: "#ffd700" },
+                    { title: "Varlık Çeşitliliği", value: `${Object.keys(portData.assets).length} Farklı Varlık`, icon: "⚖️", color: "#ff4d4d" },
+                    { title: "Toplam İşlem Hacmi", value: `₺${totalVolume.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`, icon: "📈", color: "#4caf50" }
                 ]);
 
-                if (portRes.ok && transRes.ok) {
-                    const portData = await portRes.json();
-                    const transData = await transRes.json();
+                // Map portfolio to inventory table
+                const inv = Object.entries(portData.assets).map(([symbol, data], index) => ({
+                    id: `AST-${index + 100}`,
+                    name: `${symbol} Varlığı`,
+                    qty: data.amount,
+                    value: data.avgPrice > 0 ? `Ort: ₺${data.avgPrice.toLocaleString('tr-TR', {minimumFractionDigits: 2})}` : '-'
+                }));
+                setInventoryData(inv);
 
-                    // Calculate total volume from transactions
-                    const totalVolume = transData.reduce((sum, t) => sum + t.total_cost, 0);
-
-                    setStats([
-                        { title: "Toplam Nakit Kasa Değeri", value: `₺${portData.balance.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`, icon: "💰", color: "#ffd700" },
-                        { title: "Varlık Çeşitliliği", value: `${Object.keys(portData.assets).length} Farklı Varlık`, icon: "⚖️", color: "#ff4d4d" },
-                        { title: "Toplam İşlem Hacmi", value: `₺${totalVolume.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`, icon: "📈", color: "#4caf50" }
-                    ]);
-
-                    // Map portfolio to inventory table
-                    const inv = Object.entries(portData.assets).map(([symbol, data], index) => ({
-                        id: `AST-${index + 100}`,
-                        name: `${symbol} Varlığı`,
-                        qty: data.amount,
-                        value: data.avgPrice > 0 ? `Ort: ₺${data.avgPrice.toLocaleString('tr-TR', {minimumFractionDigits: 2})}` : '-'
-                    }));
-                    setInventoryData(inv);
-
-                    // Map transactions to right table
-                    setTransactions(transData.slice(0, 10)); // Son 10 işlem
-                }
+                // Map transactions to right table
+                setTransactions(transData.slice(0, 10)); // Son 10 işlem
             } catch (error) {
                 console.error("Failed to fetch admin data:", error);
             }

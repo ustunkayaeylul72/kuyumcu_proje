@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TradeModal from '../components/TradeModal';
 import { getMarketData } from '../services/marketService';
+import { getPortfolio } from '../services/portfolioService';
 import '../styles/dashboard.css';
 
 const Invest = () => {
@@ -9,14 +10,20 @@ const Invest = () => {
     const [marketOpportunities, setMarketOpportunities] = useState([]);
     const [portfolioData, setPortfolioData] = useState({ balance: 0, assets: {} });
 
-    // Fetch portfolio data from backend
+    // Fetch portfolio data from local storage
     const fetchPortfolio = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/portfolio/1');
-            if (response.ok) {
-                const data = await response.json();
-                setPortfolioData(data);
-            }
+            const marketData = await getMarketData();
+            const priceMap = {};
+            marketData.forEach(item => {
+                if (item.symbol.includes("GRAM")) priceMap["GRAM"] = item.numericPrice;
+                if (item.symbol.includes("USD")) priceMap["USD"] = item.numericPrice;
+                if (item.symbol.includes("EUR")) priceMap["EUR"] = item.numericPrice;
+                if (item.symbol.includes("ÇEYREK")) priceMap["ÇEYREK"] = item.numericPrice;
+            });
+            
+            const data = getPortfolio(priceMap);
+            setPortfolioData(data);
         } catch (error) {
             console.error("Failed to fetch portfolio:", error);
         }

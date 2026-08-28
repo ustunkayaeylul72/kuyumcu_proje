@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getMarketData } from '../services/marketService';
+import { executeTrade } from '../services/portfolioService';
 
 const TradeModal = ({ isOpen, onClose, defaultAsset = "GRAM" }) => {
     const [amount, setAmount] = useState('');
@@ -34,20 +35,10 @@ const TradeModal = ({ isOpen, onClose, defaultAsset = "GRAM" }) => {
 
             const price = targetAsset.numericPrice;
 
-            const response = await fetch('http://localhost:5000/api/trade', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: 1, // Şimdilik varsayılan admin kullanıcısı
-                    type: type, // 'BUY' veya 'SELL'
-                    assetSymbol: asset,
-                    amount: parseFloat(amount),
-                    price: price
-                })
-            });
+            // Arka plana istek yerine LocalStorage servisimize gönderiyoruz
+            const data = await executeTrade(1, type, asset, parseFloat(amount), price);
 
-            const data = await response.json();
-            if (response.ok) {
+            if (data.success) {
                 const totalCost = price * parseFloat(amount);
                 alert(`İşlem Başarılı!\n\nBirim Fiyat: ₺${price.toLocaleString('tr-TR', {minimumFractionDigits: 2})}\nToplam Tutar: ₺${totalCost.toLocaleString('tr-TR', {minimumFractionDigits: 2})}\n\nYeni Bakiye: ₺${data.newBalance.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`);
                 setAmount('');
@@ -56,7 +47,7 @@ const TradeModal = ({ isOpen, onClose, defaultAsset = "GRAM" }) => {
                 alert(`İşlem Başarısız: ${data.error}`);
             }
         } catch (error) {
-            alert('Sunucuya bağlanılamadı.');
+            alert('İşlem sırasında bir hata oluştu: ' + error.message);
         } finally {
             setLoading(false);
         }
